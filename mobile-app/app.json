@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "DriveSmart-P2P",
+    "slug": "drivesmart-p2p",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "drivesmart",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.drivesmart.p2p"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0A0A1A"
+      },
+      "package": "com.drivesmart.p2p",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "INTERNET"
+      ]
+    },
+    "web": {
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
