@@ -1,0 +1,21 @@
+# Android/Gradle
+.gradle/
+build/
+**/build/
+local.properties
+.idea/
+*.iml
+
+# Kotlin/Java
+.kotlinc/
+.kotlin/
+*.class
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+# Large model tracked outside git (add manually or use Git LFS)
+app/src/main/assets/vehicle_trajectory.tflite

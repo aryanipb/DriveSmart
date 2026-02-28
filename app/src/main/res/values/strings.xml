@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">V2V App</string>
+    <string name="status_initializing">Initializing V2V...</string>
+    <string name="status_permissions_required">Permissions required to start V2V.</string>
+    <string name="model_output_initializing">Model output initializing...</string>
+</resources>
