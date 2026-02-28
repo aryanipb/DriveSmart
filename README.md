@@ -2,7 +2,7 @@
 
 Production-oriented Android demo for real-time Vehicle-to-Vehicle (V2V) telemetry sharing and on-device trajectory prediction.
 
-## Executive Summary
+## Overview
 `V2V App` turns Android phones into cooperative vehicle nodes. Each node publishes local motion telemetry, discovers nearby peers, exchanges state at low latency, and runs local ML inference to predict short-horizon trajectory.
 
 This is designed for demonstrations, prototyping, and field-style validation of multi-device V2V behavior.
