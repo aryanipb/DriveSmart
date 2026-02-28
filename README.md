@@ -18,7 +18,7 @@ This is designed for demonstrations, prototyping, and field-style validation of 
   - `Coordinates` tab: exact `30` predicted `(x, y)` coordinates
 
 ## Direct APK Download
-[Download latest APK](https://drive.google.com/file/d/1823_3FUI2v31unSgDAkm3v3oFvEVdFWP/view?usp=sharing)
+[Download latest APK](https://raw.githubusercontent.com/aryanipb/DriveSmart/main/app/build/outputs/apk/debug/app-debug.apk)
 
 ## Technology Stack
 - Kotlin + Android SDK (minSdk `26`, targetSdk `34`)
