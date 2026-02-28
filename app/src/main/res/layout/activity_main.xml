@@ -1,38 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/radar_background"
-    android:padding="16dp">
+    android:background="@drawable/bg_cosmic_universe">
 
-    <com.aryan.v2v.RadarView
-        android:id="@+id/radarView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <View
+        android:id="@+id/topGlow"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:background="@drawable/bg_glow_orb_blue"
+        android:alpha="0.75"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/statusText"
-        android:layout_width="wrap_content"
+    <View
+        android:id="@+id/bottomGlow"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:background="@drawable/bg_glow_orb_purple"
+        android:alpha="0.75"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/headerContainer"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|start"
-        android:background="@color/status_background"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="6dp"
-        android:text="@string/status_initializing"
-        android:textColor="@android:color/white"
-        android:textSize="12sp" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_header_panel"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/modelOutputText"
-        android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/appTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="V2V COSMOS"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/appSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Premium live mesh telemetry and trajectory intelligence"
+            android:textColor="#B7C7FF"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:background="@color/status_background"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="8dp"
-        android:text="@string/model_output_initializing"
-        android:textColor="@android:color/white"
-        android:textSize="11sp"
-        android:typeface="monospace" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_tab_host"
+        android:padding="6dp"
+        app:tabBackground="@drawable/bg_tab_item"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="#62E7FF"
+        app:tabIndicatorHeight="3dp"
+        app:tabInlineLabel="true"
+        app:tabMode="fixed"
+        app:tabRippleColor="#30B46CFF"
+        app:tabSelectedTextColor="#ECF8FF"
+        app:tabTextColor="#89A8D8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerContainer" />
 
-</FrameLayout>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,10 +12,10 @@ This is designed for demonstrations, prototyping, and field-style validation of 
 - Peer discovery + connection using Google Nearby Connections (`P2P_CLUSTER`)
 - Bi-directional state exchange (JSON payloads)
 - On-device TensorFlow Lite inference (`vehicle_trajectory.tflite`)
-- Live radar visualization:
-  - Ego vehicle (white)
-  - Neighbor vehicles (green)
-  - Predicted trajectory (cyan)
+- Premium multi-page live UI (cosmic/neon theme):
+  - `Dashboard` tab: live radar + network telemetry + model summary
+  - `Devices` tab: exact connected Nearby endpoint IDs
+  - `Coordinates` tab: exact `30` predicted `(x, y)` coordinates
 
 ## Direct APK Download
 [Download latest APK](https://github.com/aryanipb/DriveSmart/releases/latest/download/app-debug.apk)
@@ -47,8 +47,10 @@ For one-click download to work, your latest GitHub Release must include an asset
 - De-normalizes output to world coordinates for rendering
 
 4. **UI Layer**
-- Status telemetry and connection health counters
-- Radar view for relative positions + future path
+- Styled cosmic-metallic experience with animated glow accents
+- `Dashboard` page for radar + health counters + output summary
+- `Devices` page for exact connected endpoint IDs
+- `Coordinates` page for exact 30 live trajectory points
 
 ## Runtime Permissions
 Required for full operation:
@@ -72,7 +74,9 @@ Use `2+` Android phones (recommended `3-5` for stronger demo impact).
 - `found > 0`: peers discovered
 - `conn > 0`: active links established
 - `tx/rx` counters increasing: telemetry flowing
-7. Move devices and observe live radar + prediction updates.
+7. Open `Devices` tab to verify exact connected endpoint IDs.
+8. Open `Coordinates` tab to monitor exact 30 predicted points.
+9. Move devices and observe live radar + prediction updates.
 
 ## Build and Release
 ### Local debug build
@@ -95,6 +99,10 @@ Output APK:
 - Prefer outdoor/open spaces for better GPS stability.
 - Ensure Google Play Services is available/updated on test devices.
 - Use consistent app version across all participating devices.
+- Swipe across tabs during demo:
+  - `Dashboard`: operational command view
+  - `Devices`: connectivity validation view
+  - `Coordinates`: model precision view
 
 ## Troubleshooting
 - **No peers found (`found=0`)**:
@@ -119,6 +127,7 @@ Output APK:
 - `app/src/main/kotlin/com/aryan/v2v/TelemetryProvider.kt` - sensor + location ingestion
 - `app/src/main/kotlin/com/aryan/v2v/TrajectoryPredictor.kt` - model input/output pipeline
 - `app/src/main/kotlin/com/aryan/v2v/RadarView.kt` - visualization layer
+- `app/src/main/kotlin/com/aryan/v2v/ui/*` - multi-tab premium UI fragments + adapters
 
 ## License
 Add your project license information here.

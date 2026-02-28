@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="6dp"
+    android:background="@drawable/bg_list_row"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/pointIndex"
+        android:layout_width="42dp"
+        android:layout_height="wrap_content"
+        android:textColor="#86A6E0"
+        android:textSize="12sp"
+        android:typeface="monospace" />
+
+    <TextView
+        android:id="@+id/pointX"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="#D8E8FF"
+        android:textSize="13sp"
+        android:typeface="monospace" />
+
+    <TextView
+        android:id="@+id/pointY"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:textColor="#D8E8FF"
+        android:textSize="13sp"
+        android:typeface="monospace" />
+</LinearLayout>

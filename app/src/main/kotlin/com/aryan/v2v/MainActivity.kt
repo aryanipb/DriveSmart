@@ -1,29 +1,38 @@
 package com.aryan.v2v
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.widget.TextView
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.viewpager2.widget.ViewPager2
+import com.aryan.v2v.ui.DashboardState
+import com.aryan.v2v.ui.MainPagerAdapter
+import com.aryan.v2v.ui.V2VUiStateViewModel
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import java.util.Locale
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var radarView: RadarView
-    private lateinit var statusText: TextView
-    private lateinit var modelOutputText: TextView
-
     private lateinit var v2vManager: V2VManager
     private lateinit var trajectoryPredictor: TrajectoryPredictor
     private lateinit var telemetryProvider: TelemetryProvider
 
+    private lateinit var topGlow: View
+    private lateinit var bottomGlow: View
+
+    private val uiState: V2VUiStateViewModel by viewModels()
     private val inferenceExecutor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
     private val telemetryExecutor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
+
     @Volatile
     private var latestDebugStatus: V2VManager.DebugStatus = V2VManager.DebugStatus()
 
@@ -34,7 +43,12 @@ class MainActivity : AppCompatActivity() {
         if (allGranted) {
             initializePipeline()
         } else {
-            statusText.text = getString(R.string.status_permissions_required)
+            uiState.publishDashboard(
+                DashboardState(
+                    statusText = getString(R.string.status_permissions_required),
+                    modelText = "Model output unavailable"
+                )
+            )
         }
     }
 
@@ -42,9 +56,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        radarView = findViewById(R.id.radarView)
-        statusText = findViewById(R.id.statusText)
-        modelOutputText = findViewById(R.id.modelOutputText)
+        val tabLayout: TabLayout = findViewById(R.id.tabLayout)
+        val viewPager: ViewPager2 = findViewById(R.id.viewPager)
+        topGlow = findViewById(R.id.topGlow)
+        bottomGlow = findViewById(R.id.bottomGlow)
+
+        viewPager.adapter = MainPagerAdapter(this)
+        viewPager.offscreenPageLimit = 3
+
+        val tabTitles = arrayOf("Dashboard", "Devices", "Coordinates")
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = tabTitles[position]
+        }.attach()
+
+        startGlowAnimations()
 
         if (hasAllRuntimePermissions()) {
             initializePipeline()
@@ -65,8 +90,6 @@ class MainActivity : AppCompatActivity() {
         v2vManager.start()
         startLocalEgoLoop()
         startInferenceLoop()
-
-        statusText.text = "V2V active at 10Hz"
     }
 
     private fun startLocalEgoLoop() {
@@ -74,9 +97,12 @@ class MainActivity : AppCompatActivity() {
             try {
                 v2vManager.updateLocalState(telemetryProvider.currentState())
             } catch (t: Throwable) {
-                runOnUiThread {
-                    statusText.text = "SIM_ERR: ${t.javaClass.simpleName}: ${t.message}"
-                }
+                uiState.publishDashboard(
+                    DashboardState(
+                        statusText = "SIM_ERR: ${t.javaClass.simpleName}: ${t.message}",
+                        modelText = "Model output unavailable"
+                    )
+                )
             }
         }, 0L, 100L, TimeUnit.MILLISECONDS)
     }
@@ -91,39 +117,54 @@ class MainActivity : AppCompatActivity() {
 
                 val ego = v2vManager.getLocalState()
                 val neighbors = neighborSnapshots.map { it.latestState }
-                val debug = latestDebugStatus
+                val endpointIds = neighborSnapshots.map { it.endpointId }.sorted()
+                val statusText = formatStatus(neighbors.size, latestDebugStatus)
 
-                runOnUiThread {
-                    radarView.render(ego, neighbors, prediction)
-                    modelOutputText.text = predictionText
-                    statusText.text = buildString {
-                        append("N=")
-                        append(neighbors.size)
-                        append(" | adv=")
-                        append(if (debug.advertising) "1" else "0")
-                        append(" disc=")
-                        append(if (debug.discovering) "1" else "0")
-                        append(" found=")
-                        append(debug.foundEndpoints)
-                        append(" conn=")
-                        append(debug.connectedEndpoints)
-                        append(" tx=")
-                        append(debug.txPayloads)
-                        append(" rx=")
-                        append(debug.rxPayloads)
-                        if (debug.lastError.isNotEmpty()) {
-                            append(" | err=")
-                            append(debug.lastError)
-                        }
-                    }
-                }
+                uiState.publishDashboard(
+                    DashboardState(
+                        ego = ego,
+                        neighbors = neighbors,
+                        prediction = prediction,
+                        statusText = statusText,
+                        modelText = predictionText
+                    )
+                )
+                uiState.publishConnectedIds(endpointIds)
+                uiState.publishPredictedRows(prediction)
             } catch (t: Throwable) {
-                runOnUiThread {
-                    statusText.text = "INF_ERR: ${t.javaClass.simpleName}: ${t.message}"
-                    modelOutputText.text = "Model output unavailable"
-                }
+                uiState.publishDashboard(
+                    DashboardState(
+                        statusText = "INF_ERR: ${t.javaClass.simpleName}: ${t.message}",
+                        modelText = "Model output unavailable"
+                    )
+                )
+                uiState.publishConnectedIds(emptyList())
+                uiState.publishPredictedRows(FloatArray(0))
             }
         }, 0L, 100L, TimeUnit.MILLISECONDS)
+    }
+
+    private fun formatStatus(neighbors: Int, debug: V2VManager.DebugStatus): String {
+        return buildString {
+            append("N=")
+            append(neighbors)
+            append(" | adv=")
+            append(if (debug.advertising) "1" else "0")
+            append(" disc=")
+            append(if (debug.discovering) "1" else "0")
+            append(" found=")
+            append(debug.foundEndpoints)
+            append(" conn=")
+            append(debug.connectedEndpoints)
+            append(" tx=")
+            append(debug.txPayloads)
+            append(" rx=")
+            append(debug.rxPayloads)
+            if (debug.lastError.isNotEmpty()) {
+                append(" | err=")
+                append(debug.lastError)
+            }
+        }
     }
 
     private fun formatPrediction(prediction: FloatArray): String {
@@ -143,31 +184,38 @@ class MainActivity : AppCompatActivity() {
             append(" points=")
             append(points)
             append('\n')
-            append(
-                String.format(
-                    Locale.US,
-                    "range=[%.3f, %.3f]",
-                    min,
-                    max
-                )
-            )
+            append(String.format(Locale.US, "range=[%.3f, %.3f]", min, max))
             append('\n')
             append("first ")
             append(previewPairs)
             append(" pts: ")
             var i = 0
             while (i < previewPairs * 2 && i + 1 < prediction.size) {
-                append(
-                    String.format(
-                        Locale.US,
-                        "(%.2f, %.2f)",
-                        prediction[i],
-                        prediction[i + 1]
-                    )
-                )
+                append(String.format(Locale.US, "(%.2f, %.2f)", prediction[i], prediction[i + 1]))
                 if (i + 2 < previewPairs * 2) append("  ")
                 i += 2
             }
+        }
+    }
+
+    private fun startGlowAnimations() {
+        ObjectAnimator.ofFloat(topGlow, View.SCALE_X, 0.92f, 1.08f).apply {
+            duration = 4200L
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+            start()
+        }
+        ObjectAnimator.ofFloat(topGlow, View.SCALE_Y, 0.92f, 1.08f).apply {
+            duration = 4200L
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+            start()
+        }
+        ObjectAnimator.ofFloat(bottomGlow, View.ALPHA, 0.55f, 0.95f).apply {
+            duration = 3600L
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+            start()
         }
     }
 

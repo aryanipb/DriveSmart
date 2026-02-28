@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="radar_background">#09131A</color>
-    <color name="status_background">#66000000</color>
+    <color name="radar_background">#0A1024</color>
+    <color name="status_background">#660D1A38</color>
+    <color name="cosmic_primary">#7D8BFF</color>
+    <color name="cosmic_secondary">#62E7FF</color>
+    <color name="cosmic_on_primary">#ECF5FF</color>
 </resources>

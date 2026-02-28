@@ -8,6 +8,8 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.view.View
 import kotlin.math.min
+import kotlin.math.cos
+import kotlin.math.sin
 
 class RadarView @JvmOverloads constructor(
     context: Context,
@@ -27,14 +29,22 @@ class RadarView @JvmOverloads constructor(
         strokeWidth = 2f
     }
 
+    private val scanPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.argb(140, 92, 247, 255)
+        style = Paint.Style.STROKE
+        strokeWidth = 3f
+    }
+
     private val egoPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
         style = Paint.Style.FILL
+        setShadowLayer(18f, 0f, 0f, Color.argb(180, 255, 255, 255))
     }
 
     private val neighborPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.parseColor("#4CAF50")
         style = Paint.Style.FILL
+        setShadowLayer(16f, 0f, 0f, Color.argb(190, 90, 235, 120))
     }
 
     private val trajectoryPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -43,6 +53,7 @@ class RadarView @JvmOverloads constructor(
         strokeWidth = 6f
         strokeCap = Paint.Cap.ROUND
         strokeJoin = Paint.Join.ROUND
+        setShadowLayer(16f, 0f, 0f, Color.argb(210, 80, 233, 255))
     }
 
     fun render(ego: V2VState, neighborStates: List<V2VState>, prediction: FloatArray) {
@@ -62,6 +73,7 @@ class RadarView @JvmOverloads constructor(
         val radius = min(width, height) * 0.44f
         val metersToPx = radius / 120f
 
+        canvas.drawCircle(centerX, centerY, radius, scanPaint)
         canvas.drawCircle(centerX, centerY, radius, gridPaint)
         canvas.drawCircle(centerX, centerY, radius * 0.66f, gridPaint)
         canvas.drawCircle(centerX, centerY, radius * 0.33f, gridPaint)
@@ -74,6 +86,11 @@ class RadarView @JvmOverloads constructor(
             localNeighbors = neighbors
             localTrajectory = trajectory
         }
+
+        val theta = ((System.currentTimeMillis() % 4000L) / 4000f) * (2f * Math.PI.toFloat())
+        val scanX = centerX + radius * cos(theta)
+        val scanY = centerY + radius * sin(theta)
+        canvas.drawLine(centerX, centerY, scanX, centerY - (scanY - centerY), scanPaint)
 
         canvas.drawCircle(centerX, centerY, 12f, egoPaint)
 
