@@ -18,7 +18,7 @@ This is designed for demonstrations, prototyping, and field-style validation of 
   - `Coordinates` tab: exact `30` predicted `(x, y)` coordinates
 
 ## Direct APK Download
-[Download latest APK](https://github.com/aryanipb/DriveSmart/releases/latest/download/app-debug.apk)
+[Download latest APK](https://drive.google.com/file/d/1823_3FUI2v31unSgDAkm3v3oFvEVdFWP/view?usp=sharing)
 
 For one-click download to work, your latest GitHub Release must include an asset named exactly:
 - `app-debug.apk`
