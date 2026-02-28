@@ -100,7 +100,6 @@ Use `2+` Android phones (recommended `3-5` for stronger demo impact).
 ## Current Scope and Limits
 - Optimized for prototype/demo usage, not certified vehicular safety deployment.
 - Uses mobile sensors and Nearby transport, so performance depends on device hardware and environment.
-- Model quality depends on training/export quality of bundled `vehicle_trajectory.tflite`.
 
 ## Repository Structure
 - `app/src/main/kotlin/com/aryan/v2v/MainActivity.kt` - app orchestration loops
@@ -109,6 +108,3 @@ Use `2+` Android phones (recommended `3-5` for stronger demo impact).
 - `app/src/main/kotlin/com/aryan/v2v/TrajectoryPredictor.kt` - model input/output pipeline
 - `app/src/main/kotlin/com/aryan/v2v/RadarView.kt` - visualization layer
 - `app/src/main/kotlin/com/aryan/v2v/ui/*` - multi-tab premium UI fragments + adapters
-
-## License
-Add your project license information here.
