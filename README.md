@@ -20,9 +20,6 @@ This is designed for demonstrations, prototyping, and field-style validation of 
 ## Direct APK Download
 [Download latest APK](https://drive.google.com/file/d/1823_3FUI2v31unSgDAkm3v3oFvEVdFWP/view?usp=sharing)
 
-For one-click download to work, your latest GitHub Release must include an asset named exactly:
-- `app-debug.apk`
-
 ## Technology Stack
 - Kotlin + Android SDK (minSdk `26`, targetSdk `34`)
 - Google Play Services Nearby (`play-services-nearby`)
@@ -77,22 +74,6 @@ Use `2+` Android phones (recommended `3-5` for stronger demo impact).
 7. Open `Devices` tab to verify exact connected endpoint IDs.
 8. Open `Coordinates` tab to monitor exact 30 predicted points.
 9. Move devices and observe live radar + prediction updates.
-
-## Build and Release
-### Local debug build
-```bash
-./gradlew :app:assembleDebug
-```
-
-Output APK:
-- `app/build/outputs/apk/debug/app-debug.apk`
-
-### GitHub Release flow (for direct download link)
-1. Build APK.
-2. Create/update a GitHub Release.
-3. Upload asset as `app-debug.apk`.
-4. Verify download URL:
-- `https://github.com/aryanipb/DriveSmart/releases/latest/download/app-debug.apk`
 
 ## Operational Guidance
 - Keep screens awake during demonstration to reduce background throttling.
