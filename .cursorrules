@@ -1,1 +1,0 @@
-"Strictly use Kotlin and Android Native APIs. Target SDK 34. Dependencies: Play Services Nearby, LiteRT (TensorFlow Lite). Architecture: MVVM with a custom RadarView."
