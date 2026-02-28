@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = MainPagerAdapter(this)
         viewPager.offscreenPageLimit = 3
 
-        val tabTitles = arrayOf("Dashboard", "Devices", "Coordinates")
+        val tabTitles = arrayOf("Dashboard", "Devices", "Coords")
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = tabTitles[position]
         }.attach()

@@ -25,7 +25,7 @@ class PredictedCoordinatesFragment : Fragment(R.layout.fragment_predicted_coordi
         uiState.predictedRows.observe(viewLifecycleOwner) { rows ->
             adapter.submit(rows)
             val available = rows.count { it.x != null && it.y != null }
-            summary.text = "Exact 30 live points from trajectory model | available=$available/30"
+            summary.text = "Predicted coordinates for 3 seconds!"
         }
     }
 }

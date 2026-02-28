@@ -41,7 +41,7 @@
             android:id="@+id/appTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="V2V COSMOS"
+            android:text="V2V Prototype App"
             android:textColor="@android:color/white"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Premium live mesh telemetry and trajectory intelligence"
+            android:text="Trajectory forecasting application"
             android:textColor="#B7C7FF"
             android:textSize="12sp" />
     </LinearLayout>
